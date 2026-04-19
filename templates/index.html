@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopWave AI Support Agent — Multi-Agent Ticket Automation</title>
+  <meta name="description" content="AI-powered multi-agent system for automated customer support ticket classification, resolution, and escalation.">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-icon">🤖</div>
+      <div class="header-title">
+        <h1>ShopWave AI Support Agent</h1>
+        <p>Multi-Agent Ticket Automation · Powered by Groq LLaMA 3.3</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-chip idle" id="status-chip">
+        <span class="dot"></span>
+        <span class="status-label">Idle</span>
+      </div>
+      <button class="btn-run" id="btn-run">▶ Process Tickets</button>
+      <!-- Evaluation hidden for final submission focus -->
+    </div>
+  </header>
+
+  <!-- ─── ANALYTICS DASHBOARD (Hidden) ─── -->
+  <div id="analytics-dashboard" style="display:none; margin-bottom: 40px;">
+    
+    <!-- Report 1: Hackathon Scorecard -->
+    <div class="scorecard-container" id="scorecard-container">
+      <div class="report-tag">Report A</div>
+      <div class="scorecard-header">
+        <h2>🏆 Hackathon Scorecard: <span id="total-score">0</span> / 100</h2>
+        <p>Mapped to formal judging criteria</p>
+      </div>
+      <div class="scorecard-grid">
+        <div class="score-item">
+          <div class="score-label">Production Readiness</div>
+          <div class="score-bar"><div class="score-fill" id="score-prod" style="width:0%"></div></div>
+          <div class="score-val"><span id="val-prod">0</span>/30</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Agentic Design</div>
+          <div class="score-bar"><div class="score-fill" id="score-agentic" style="width:0%"></div></div>
+          <div class="score-val"><span id="val-agentic">0</span>/10</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Engineering Depth</div>
+          <div class="score-bar"><div class="score-fill" id="score-depth" style="width:0%"></div></div>
+          <div class="score-val"><span id="val-depth">0</span>/30</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Evaluation & Self-awareness</div>
+          <div class="score-bar"><div class="score-fill" id="score-eval" style="width:0%"></div></div>
+          <div class="score-val"><span id="val-eval">0</span>/10</div>
+        </div>
+        <div class="score-item">
+          <div class="score-label">Presentation</div>
+          <div class="score-bar"><div class="score-fill" id="score-pres" style="width:0%"></div></div>
+          <div class="score-val"><span id="val-pres">0</span>/20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report 2: Scientific Metrics (Paper Baseline) -->
+    <div class="metrics-container" id="paper-metrics-container">
+      <div class="report-tag">Report B</div>
+      <div class="scorecard-header">
+        <h2>📄 Scientific Metrics</h2>
+        <p>Baseline from research paper: Accuracy, Precision, Recall, F1</p>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-val" id="metric-acc">0%</div>
+          <div class="metric-label">Accuracy</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="metric-pre">0%</div>
+          <div class="metric-label">Precision</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="metric-rec">0%</div>
+          <div class="metric-label">Recall</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="metric-f1">0.00</div>
+          <div class="metric-label">F1-Score</div>
+        </div>
+        <div class="metric-box wide">
+          <div class="metric-val" id="metric-sim">0.00</div>
+          <div class="metric-label">Mean Semantic Similarity</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report 3: Component Health Deep Dive -->
+    <div class="components-container">
+      <div class="report-tag">Report C</div>
+      <div class="scorecard-header">
+        <h2>🏗️ Component Health</h2>
+        <p>Pipeline-stage performance analysis</p>
+      </div>
+      <div class="component-grid">
+        <div class="comp-card">
+          <div class="comp-icon">📥</div>
+          <div class="comp-name">Reader Agent</div>
+          <div class="comp-stat">ID Hit Rate: <span id="stat-reader-hit">0</span>%</div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-icon">🏷️</div>
+          <div class="comp-name">Classifier Agent</div>
+          <div class="comp-stat">Avg Confidence: <span id="stat-class-conf">0</span>%</div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-icon">🔧</div>
+          <div class="comp-name">Resolver Agent</div>
+          <div class="comp-stat">Avg Tool Chain: <span id="stat-res-chain">0</span></div>
+        </div>
+        <div class="comp-card">
+          <div class="comp-icon">🛡️</div>
+          <div class="comp-name">Reliability</div>
+          <div class="comp-stat">Tool Success: <span id="stat-rel-success">0</span>%</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ STATS BAR ═══ -->
+  <div class="stats-bar">
+    <div class="stat-card total">
+      <div class="stat-label">Total Tickets</div>
+      <div class="stat-value" id="stat-total">20</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value" id="stat-pending">20</div>
+    </div>
+    <div class="stat-card resolved">
+      <div class="stat-label">Resolved</div>
+      <div class="stat-value" id="stat-resolved">0</div>
+    </div>
+    <div class="stat-card escalated">
+      <div class="stat-label">Escalated</div>
+      <div class="stat-value" id="stat-escalated">0</div>
+    </div>
+    <div class="stat-card failed">
+      <div class="stat-label">Failed</div>
+      <div class="stat-value" id="stat-failed">0</div>
+    </div>
+    <div class="stat-card time">
+      <div class="stat-label">Avg Time</div>
+      <div class="stat-value" id="stat-time">—</div>
+    </div>
+  </div>
+
+  <!-- ═══ ARCHITECTURE DIAGRAM ═══ -->
+  <div class="arch-section">
+    <button class="arch-toggle" id="arch-toggle">
+      <span class="chevron">▶</span>
+      <span>🏗️ Architecture — Multi-Agent Pipeline &amp; Tools</span>
+    </button>
+    <div class="arch-content" id="arch-content">
+      <div class="arch-diagram">
+        <!-- Agent pipeline -->
+        <div class="pipeline">
+          <div class="pipeline-stage" id="stage-reader">
+            <div class="stage-icon">📥</div>
+            <div class="stage-name">Reader Agent</div>
+            <div class="stage-desc">Text extraction<br>Order ID, email, sentiment</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-stage" id="stage-classifier">
+            <div class="stage-icon">🏷️</div>
+            <div class="stage-name">Classifier Agent</div>
+            <div class="stage-desc">Category, priority<br>Auto-resolve decision</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-stage" id="stage-resolver">
+            <div class="stage-icon">🔧</div>
+            <div class="stage-name">Resolver Agent</div>
+            <div class="stage-desc">Tool-calling loop<br>Autonomous resolution</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-stage" id="stage-output">
+            <div class="stage-icon">✅</div>
+            <div class="stage-name">Output</div>
+            <div class="stage-desc">Send reply or<br>Escalate to human</div>
+          </div>
+        </div>
+
+        <!-- Tools grid -->
+        <div class="tools-grid">
+          <div class="tool-chip"><span class="tool-icon">🔍</span> get_order()</div>
+          <div class="tool-chip"><span class="tool-icon">👤</span> get_customer()</div>
+          <div class="tool-chip"><span class="tool-icon">📦</span> get_product()</div>
+          <div class="tool-chip"><span class="tool-icon">📚</span> search_knowledge_base()</div>
+          <div class="tool-chip"><span class="tool-icon">✅</span> check_refund_eligibility()</div>
+          <div class="tool-chip"><span class="tool-icon">💰</span> issue_refund()</div>
+          <div class="tool-chip"><span class="tool-icon">💬</span> send_reply()</div>
+          <div class="tool-chip"><span class="tool-icon">🚨</span> escalate()</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TICKET GRID ═══ -->
+  <div class="section-header">
+    <h2>Support Tickets</h2>
+    <span class="ticket-count" id="ticket-count">20 tickets</span>
+  </div>
+  <div class="tickets-grid" id="tickets-grid">
+    <!-- Rendered by JS -->
+  </div>
+
+</div>
+
+<!-- ═══ MODAL ═══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Embed ticket data for JS -->
+<script id="tickets-data" type="application/json">
+{{ tickets_json | safe }}
+</script>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
