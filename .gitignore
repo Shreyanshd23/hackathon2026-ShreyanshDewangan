@@ -1,0 +1,17 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# runtime artifacts
+*.db
+shopwave.db
+
+# local envs
+.venv/
+venv/

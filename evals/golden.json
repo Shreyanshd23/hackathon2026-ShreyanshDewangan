@@ -1,0 +1,25 @@
+{
+  "_comment": "Hand-curated ground truth for offline evaluation. true_category is the intended category; expected_escalation is true when the correct outcome is a human hand-off, false when the agent should resolve autonomously, null when either is defensible (e.g. social-engineering decline).",
+  "labels": [
+    {"ticket_id": "TKT-001", "true_category": "refund", "expected_escalation": false},
+    {"ticket_id": "TKT-002", "true_category": "return", "expected_escalation": false},
+    {"ticket_id": "TKT-003", "true_category": "warranty", "expected_escalation": true},
+    {"ticket_id": "TKT-004", "true_category": "exchange", "expected_escalation": false},
+    {"ticket_id": "TKT-005", "true_category": "return", "expected_escalation": false},
+    {"ticket_id": "TKT-006", "true_category": "cancellation", "expected_escalation": false},
+    {"ticket_id": "TKT-007", "true_category": "return", "expected_escalation": false},
+    {"ticket_id": "TKT-008", "true_category": "refund", "expected_escalation": false},
+    {"ticket_id": "TKT-009", "true_category": "refund", "expected_escalation": false},
+    {"ticket_id": "TKT-010", "true_category": "delivery_status", "expected_escalation": false},
+    {"ticket_id": "TKT-011", "true_category": "exchange", "expected_escalation": false},
+    {"ticket_id": "TKT-012", "true_category": "cancellation", "expected_escalation": false},
+    {"ticket_id": "TKT-013", "true_category": "return", "expected_escalation": false},
+    {"ticket_id": "TKT-014", "true_category": "return", "expected_escalation": false},
+    {"ticket_id": "TKT-015", "true_category": "exchange", "expected_escalation": true},
+    {"ticket_id": "TKT-016", "true_category": "refund", "expected_escalation": false},
+    {"ticket_id": "TKT-017", "true_category": "refund", "expected_escalation": false},
+    {"ticket_id": "TKT-018", "true_category": "refund", "expected_escalation": null},
+    {"ticket_id": "TKT-019", "true_category": "general_inquiry", "expected_escalation": false},
+    {"ticket_id": "TKT-020", "true_category": "ambiguous", "expected_escalation": false}
+  ]
+}
